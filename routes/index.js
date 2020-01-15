@@ -4,6 +4,7 @@ const userModel=require('../modals/userModal');
 const User = new userModel();
 var jwt = require('jsonwebtoken');
 const ensureToken = require('../middleware/middleware.js');
+var client = require('../redisServer.js');
 
 // var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
 
@@ -52,7 +53,7 @@ router.post('/login' , function(req, res, next) {
   userModel.findOne({'email':email,'password':pass}).then(resp=>{
     if (!resp || resp.length == 0) throw "Data not Found";
     var token = jwt.sign({ User: resp },'secret');
-    console.log('resp',resp);
+    // console.log('resp',resp);
   if(token)
   {
     userModel.update({_id:resp._id},{accessToken:token}).then(saveResp=>{   
